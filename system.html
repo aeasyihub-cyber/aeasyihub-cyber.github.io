@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The AEasyI System — How It Works</title>
+  <style>
+    :root {
+      --navy:    #0D1B2A;
+      --navy-l:  #132336;
+      --navy-m:  #1a2d42;
+      --card:    #162030;
+      --blue:    #0080FF;
+      --gold:    #F4C542;
+      --green:   #22c55e;
+      --purple:  #a78bfa;
+      --teal:    #22d3ee;
+      --muted:   #8ba0b8;
+      --dim:     #4a6a8a;
+      --border:  rgba(0,128,255,0.2);
+      --r:       12px;
+      --font:    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--navy);
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      padding: 72px 24px 0;
+    }
+    .header-badge {
+      display: inline-block;
+      background: rgba(0,128,255,0.1);
+      border: 1px solid rgba(0,128,255,0.3);
+      color: var(--blue);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 14px;
+    }
+    .header h1 span { color: var(--gold); }
+    .header p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto 16px;
+      line-height: 1.7;
+    }
+    .header-note {
+      font-size: 0.85rem;
+      color: var(--gold);
+      opacity: 0.8;
+    }
+
+    /* ── Grid layout ── */
+    .page { max-width: 1200px; margin: 0 auto; padding: 56px 24px 96px; }
+
+    /* ── Section title ── */
+    .sec-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 20px;
+    }
+
+    /* ── Flow diagram ── */
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      margin-bottom: 64px;
+      align-items: stretch;
+    }
+    .flow-step {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 28px 20px;
+      text-align: center;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+    .flow-step:first-child { border-radius: var(--r) 0 0 var(--r); }
+    .flow-step:last-child  { border-radius: 0 var(--r) var(--r) 0; }
+    .flow-step + .flow-step { border-left: none; }
+    .flow-step:hover { border-color: rgba(0,128,255,0.5); z-index: 1; }
+    .flow-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .flow-step h3 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .flow-step p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .flow-arrow {
+      position: absolute;
+      right: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 24px;
+      height: 24px;
+      background: var(--navy);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      color: var(--blue);
+      z-index: 2;
+    }
+    .flow-step:last-child .flow-arrow { display: none; }
+
+    /* ── Three columns ── */
+    .three-col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 64px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 28px 24px;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .card-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .icon-blue   { background: rgba(0,128,255,0.1); border: 1px solid rgba(0,128,255,0.25); }
+    .icon-gold   { background: rgba(244,197,66,0.1);  border: 1px solid rgba(244,197,66,0.25); }
+    .icon-green  { background: rgba(34,197,94,0.1);   border: 1px solid rgba(34,197,94,0.25); }
+    .icon-purple { background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.25); }
+    .icon-teal   { background: rgba(34,211,238,0.1);  border: 1px solid rgba(34,211,238,0.25); }
+    .card-header h3 { font-size: 0.97rem; font-weight: 700; }
+    .card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .card ul li {
+      font-size: 0.84rem;
+      color: var(--muted);
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.55;
+    }
+    .card ul li::before {
+      content: '›';
+      position: absolute; left: 0;
+      color: var(--blue); font-weight: 700;
+    }
+    .badge-live {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(34,197,94,0.08);
+      border: 1px solid rgba(34,197,94,0.2);
+      color: #4ade80;
+      font-size: 0.7rem; font-weight: 700;
+      padding: 2px 10px; border-radius: 20px;
+      margin-left: auto;
+    }
+    .dot-green {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #4ade80;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+
+    /* ── Telegram section ── */
+    .tg-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+      margin-bottom: 64px;
+    }
+    .tg-header {
+      background: var(--navy-m);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .tg-logo {
+      width: 36px; height: 36px;
+      background: #229ED9;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+    .tg-header h3 { font-size: 1rem; font-weight: 700; }
+    .tg-header p  { font-size: 0.82rem; color: var(--muted); }
+    .tg-body {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .tg-col h4 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .tg-msg {
+      background: rgba(0,128,255,0.06);
+      border: 1px solid rgba(0,128,255,0.15);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      font-size: 0.8rem;
+      line-height: 1.75;
+      color: var(--muted);
+    }
+    .tg-msg strong { color: #fff; display: block; margin-bottom: 4px; }
+    .tg-msg .gold { color: var(--gold); font-weight: 600; }
+    .tg-msg .green { color: #4ade80; font-weight: 600; }
+    .tg-cmd-list { display: flex; flex-direction: column; gap: 10px; }
+    .tg-cmd {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .tg-cmd-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--blue);
+      font-family: monospace;
+      margin-bottom: 4px;
+    }
+    .tg-cmd-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── Timeline ── */
+    .timeline { margin-bottom: 64px; }
+    .tl-items { display: flex; flex-direction: column; gap: 0; }
+    .tl-item {
+      display: grid;
+      grid-template-columns: 120px 24px 1fr;
+      gap: 0 20px;
+      align-items: start;
+    }
+    .tl-time {
+      text-align: right;
+      font-size: 0.78rem;
+      color: var(--muted);
+      padding-top: 3px;
+      font-weight: 600;
+    }
+    .tl-spine {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .tl-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--blue);
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+    .tl-dot--gold { background: var(--gold); }
+    .tl-dot--green { background: var(--green); }
+    .tl-line {
+      width: 1px;
+      background: var(--border);
+      flex: 1;
+      min-height: 32px;
+    }
+    .tl-item:last-child .tl-line { display: none; }
+    .tl-content {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 18px;
+      margin-bottom: 12px;
+    }
+    .tl-content h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; }
+    .tl-content p  { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── Numbers bar ── */
+    .numbers-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 64px;
+    }
+    .num-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 28px 20px;
+      text-align: center;
+    }
+    .num-val {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .num-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── CTA ── */
+    .cta-box {
+      background: linear-gradient(135deg, rgba(0,128,255,0.08) 0%, rgba(244,197,66,0.05) 100%);
+      border: 1px solid rgba(244,197,66,0.3);
+      border-radius: 16px;
+      padding: 52px 40px;
+      text-align: center;
+    }
+    .cta-box h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; margin-bottom: 12px; }
+    .cta-box p  { font-size: 1rem; color: var(--muted); max-width: 520px; margin: 0 auto 32px; line-height: 1.72; }
+    .cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-primary { background: var(--blue); color: #fff; border: 2px solid var(--blue); }
+    .btn-primary:hover { background: #0066cc; border-color: #0066cc; transform: translateY(-1px); box-shadow: 0 0 20px rgba(0,128,255,0.4); }
+    .btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.2); }
+    .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .flow { grid-template-columns: 1fr; }
+      .flow-step { border-radius: 0; }
+      .flow-step:first-child { border-radius: var(--r) var(--r) 0 0; }
+      .flow-step:last-child  { border-radius: 0 0 var(--r) var(--r); }
+      .flow-step + .flow-step { border-left: 1px solid var(--border); border-top: none; }
+      .flow-arrow { right: 50%; bottom: -12px; top: auto; transform: translateX(50%) rotate(90deg); }
+      .three-col { grid-template-columns: 1fr; }
+      .tg-body { grid-template-columns: 1fr; }
+      .numbers-bar { grid-template-columns: repeat(2, 1fr); }
+      .tl-item { grid-template-columns: 80px 20px 1fr; gap: 0 12px; }
+    }
+    @media (max-width: 480px) {
+      .numbers-bar { grid-template-columns: 1fr 1fr; }
+      .cta-btns { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-badge">AEasyI AI Developing Services</div>
+    <h1>Your business, running on<br><span>autopilot.</span></h1>
+    <p>One system. Six agents. Marketing, leads, sales, clients, projects, and finance — all automated. Built for Gulf SMBs.</p>
+    <div class="header-note">This is the exact system we run for our own business — and build for clients.</div>
+  </div>
+
+  <div class="page">
+
+    <!-- Numbers bar -->
+    <p class="sec-title">Live System Metrics</p>
+    <div class="numbers-bar">
+      <div class="num-item">
+        <div class="num-val">14</div>
+        <div class="num-label">Posts published per week</div>
+      </div>
+      <div class="num-item">
+        <div class="num-val">50</div>
+        <div class="num-label">Leads sourced per day</div>
+      </div>
+      <div class="num-item">
+        <div class="num-val">4</div>
+        <div class="num-label">Platforms automated</div>
+      </div>
+      <div class="num-item">
+        <div class="num-val">0</div>
+        <div class="num-label">Hours of manual work</div>
+      </div>
+    </div>
+
+    <!-- Flow diagram -->
+    <p class="sec-title">How a Lead Becomes a Client — Fully Automated</p>
+    <div class="flow">
+      <div class="flow-step">
+        <span class="flow-icon">🔍</span>
+        <h3>Find</h3>
+        <p>Scrapes Google Maps, Yelp & Apollo daily. Adds qualified leads to your sheet automatically.</p>
+        <div class="flow-arrow">›</div>
+      </div>
+      <div class="flow-step">
+        <span class="flow-icon">✉️</span>
+        <h3>Outreach</h3>
+        <p>Personalised email sent to each lead. Industry-specific copy. Portfolio link included.</p>
+        <div class="flow-arrow">›</div>
+      </div>
+      <div class="flow-step">
+        <span class="flow-icon">🔄</span>
+        <h3>Follow-up</h3>
+        <p>3 follow-ups on Day 5, 12 & 21 if no reply. Each sent in the original thread.</p>
+        <div class="flow-arrow">›</div>
+      </div>
+      <div class="flow-step">
+        <span class="flow-icon">🧠</span>
+        <h3>Classify</h3>
+        <p>AI reads every reply. YES or NO — logged in the sheet. You get a Telegram alert instantly.</p>
+        <div class="flow-arrow">›</div>
+      </div>
+      <div class="flow-step">
+        <span class="flow-icon">📅</span>
+        <h3>Book</h3>
+        <p>AI brief generated. Calendly link sent. Booking confirmed to Telegram. Call is ready.</p>
+        <div class="flow-arrow">›</div>
+      </div>
+    </div>
+
+    <!-- 3 agents -->
+    <p class="sec-title">The Agents Running in the Background</p>
+    <div class="three-col">
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon icon-blue">📢</div>
+          <div>
+            <h3>Marketing Agent</h3>
+            <span class="badge-live"><span class="dot-green"></span>Live</span>
+          </div>
+        </div>
+        <ul>
+          <li>Generates 10 posts + 4 carousels every Sunday</li>
+          <li>Publishes to Instagram, Facebook & LinkedIn daily</li>
+          <li>English + Arabic content automatically</li>
+          <li>Weekly analytics report with reach + engagement</li>
+          <li>Sends posts to Telegram for your approval before publishing</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon icon-gold">🎯</div>
+          <div>
+            <h3>Leads Agent</h3>
+            <span class="badge-live"><span class="dot-green"></span>Live</span>
+          </div>
+        </div>
+        <ul>
+          <li>Scrapes 50+ qualified leads per day from 4 sources</li>
+          <li>Sends 80 personalised outreach emails per day</li>
+          <li>3-stage follow-up sequence per lead (Day 5, 12, 21)</li>
+          <li>AI classifies every reply — YES, NO, or ambiguous</li>
+          <li>Live dashboard showing pipeline, reply rates by industry</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon icon-green">💼</div>
+          <div>
+            <h3>Sales Agent</h3>
+            <span class="badge-live"><span class="dot-green"></span>Live</span>
+          </div>
+        </div>
+        <ul>
+          <li>AI reads the lead's sheet data → writes a 5-bullet call brief</li>
+          <li>Sends enriched Telegram alert: who, pain point, recommended package</li>
+          <li>Detects Calendly bookings → notifies you with full brief</li>
+          <li>One command sends a follow-up email from your phone</li>
+          <li>Tracks demo-scheduled and booked status in the sheet</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Telegram section -->
+    <p class="sec-title">Your Command Centre — Telegram</p>
+    <div class="tg-section">
+      <div class="tg-header">
+        <div class="tg-logo">✈️</div>
+        <div>
+          <h3>Telegram Bot</h3>
+          <p>Alerts arrive automatically. Commands work from your phone, anywhere, any time.</p>
+        </div>
+      </div>
+      <div class="tg-body">
+        <div class="tg-col">
+          <h4>Automatic alerts you receive</h4>
+          <div class="tg-msg">
+            <strong>🔥 HOT LEAD — Al Noor Medical</strong>
+            Industry: Healthcare | Dubai<br>
+            Contact: Dr. Ahmed (ahmed@alnoor.ae)<br><br>
+            <span class="gold">CALL BRIEF:</span><br>
+            - 12-person clinic, founded 2019<br>
+            - Pain: manual appointment reminders<br>
+            - Opening: "How do you handle no-shows?"<br>
+            - Recommended: Growth Engine AED 4,500/mo<br><br>
+            <span class="gold">[Book demo]  [Send follow-up]</span>
+          </div>
+          <div class="tg-msg">
+            <strong>📅 CALENDLY BOOKED — Al Noor Medical</strong>
+            Call time: Tuesday 15 Jun, 10:00 Gulf<br>
+            Invitee: Dr. Ahmed Al-Rashidi<br><br>
+            <span class="green">Sheet updated. Good luck on the call.</span>
+          </div>
+        </div>
+        <div class="tg-col">
+          <h4>Commands you can type</h4>
+          <div class="tg-cmd-list">
+            <div class="tg-cmd">
+              <div class="tg-cmd-name">/schedule_demo &lt;business name&gt;</div>
+              <div class="tg-cmd-desc">Sends a Calendly follow-up email in the original thread — from your phone, in 5 seconds. No laptop, no Gmail, no copy-pasting.</div>
+            </div>
+            <div class="tg-cmd">
+              <div class="tg-cmd-name">/mark_booked &lt;business name&gt;</div>
+              <div class="tg-cmd-desc">If a deal was agreed over the phone or WhatsApp, mark it as booked manually so the sheet stays accurate.</div>
+            </div>
+            <div class="tg-cmd">
+              <div class="tg-cmd-name">/help</div>
+              <div class="tg-cmd-desc">Shows the full list of available commands.</div>
+            </div>
+            <div class="tg-cmd" style="opacity:0.45; border-style: dashed;">
+              <div class="tg-cmd-name">/status &nbsp;&nbsp;<span style="color:var(--dim);font-size:0.75rem;">— coming in Phase 6</span></div>
+              <div class="tg-cmd-desc">Full company overview: pipeline, clients, social, finance, projects — in one message.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly timeline -->
+    <p class="sec-title">What Runs Every Week Without You</p>
+    <div class="timeline">
+      <div class="tl-items">
+        <div class="tl-item">
+          <div class="tl-time">Sunday 04:00</div>
+          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div class="tl-content">
+            <h4>Content generation</h4>
+            <p>10 social posts + 4 carousels generated in English and Arabic. Sent to Telegram for approval.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">Every day 09:00</div>
+          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div class="tl-content">
+            <h4>Lead scraping + morning post</h4>
+            <p>50+ new leads added to sheet. Morning post published to IG + FB + LinkedIn. Outreach emails sent.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">Every day 15:00</div>
+          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div class="tl-content">
+            <h4>Afternoon post + reply check</h4>
+            <p>Afternoon post published. All email replies classified by AI. YES leads → Telegram alert + call brief.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">Every 4 hours</div>
+          <div class="tl-spine"><div class="tl-dot tl-dot--gold"></div><div class="tl-line"></div></div>
+          <div class="tl-content">
+            <h4>Calendly booking check</h4>
+            <p>Scans for new bookings. Matches email to lead. Sends Telegram confirmation with call brief.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">Every 30 min</div>
+          <div class="tl-spine"><div class="tl-dot tl-dot--green"></div><div class="tl-line"></div></div>
+          <div class="tl-content">
+            <h4>Telegram command check</h4>
+            <p>Bot picks up any commands you've typed and executes them — schedule_demo, mark_booked, etc.</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">Day 5 / 12 / 21</div>
+          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div class="tl-content">
+            <h4>Follow-up sequences</h4>
+            <p>If a lead hasn't replied, a follow-up is sent automatically in the original thread — different angle each time.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-box">
+      <h2>Want this running for your business?</h2>
+      <p>We build the same system — customised to your industry, your audience, and your brand. Start with a 2-week Proof Sprint for AED 1,500.</p>
+      <div class="cta-btns">
+        <a href="https://calendly.com/aeasyihub/30min" class="btn btn-primary">Book a 30-min demo</a>
+        <a href="index.html" class="btn btn-outline">See full portfolio</a>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
